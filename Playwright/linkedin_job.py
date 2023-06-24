@@ -1,6 +1,9 @@
 from playwright.sync_api import sync_playwright
 import time
 from constant import PATH_EDGE, WEBSITE
+import pandas as pd
+from fuzzywuzzy import fuzz
+from fuzzywuzzy import process
 
 
 class linkedinJob():
@@ -8,7 +11,7 @@ class linkedinJob():
     def opening_jobs(self):
         with sync_playwright() as playwright:
             browser_type = playwright.chromium
-            browser = browser_type.launch_persistent_context(channel="msedge", user_data_dir= PATH_EDGE, headless=False)
+            browser = browser_type.launch_persistent_context(channel="msedge", viewport={"width": 1366, "height": 625}, user_data_dir= PATH_EDGE, headless=False)
             page = browser.new_page()
             self.page = page
 
@@ -62,6 +65,11 @@ class linkedinJob():
         self.ApplicationTitle = ApplicationTitle
         print("The title is :", ApplicationTitle)
 
+        #Application Job Link
+        self.JobLink = self.getRequiredJobLink()
+        print("The job link is :", self.JobLink)
+
+
         # Total Pages Buttons
         self.page.wait_for_selector("//ul[contains(@class, 'artdeco-pagination__pages--number')]//button", state='visible') 
         allPagesButton = self.page.locator("//ul[contains(@class, 'artdeco-pagination__pages--number')]//button").count()
@@ -107,7 +115,7 @@ class linkedinJob():
         appHeader = self.page.locator("(//div[contains(@class, 'hiring-applicant-header')])[1]")
         Message = None
 
-        # Message already send or not
+        ## Message already send or not
         alreadyMessageSent = appHeader.get_by_text("Message sent").is_visible(timeout=2000)
         if alreadyMessageSent: return 
 
@@ -136,7 +144,6 @@ class linkedinJob():
         #Sending Message to Applicant
         self.sendMessage()
 
-
         #Closing the Message box and discard button if any
         self.page.locator("//button[span[contains(., 'Close') and contains(., 'conversation')]]").click()
         discardPopup = self.page.get_by_role("button", name = "Discard").is_visible(timeout=3000)
@@ -147,16 +154,42 @@ class linkedinJob():
 
 
     def sendMessage(self):
+        
+        #Sending Message to Each applicant
         messaging = self.page.locator("//div[@aria-label='Messaging' and @role='dialog']")
         msgBox = messaging.get_by_role("textbox")
         msgBox.click()
-        msgBox.click()
+        messageSentence = f"Hi {self.ApplicantName},\nthank you for your interest in the {self.ApplicationTitle}, the opening is with one of our partner companies.\n\nPlease submit your resume through this link: {self.JobLink} To increase your chances of being matched with job opportunities with our partner companies, Please complete your profile on Qureos.\nOnce you have submitted your application, please let me know so that I can confirm its receipt. \n𝗔 𝗤𝗨𝗜𝗖𝗞 𝗧𝗜𝗣: Boost your odds of success, {self.ApplicantName}: Must Complete your profile to 100% and stand out from the competition!"
+        # messageSentence = messageSentence.encode('utf-8').decode('unicode-escape')
+        msgBox.fill(messageSentence)
+
+        #Checking Valid link to send msg
+        if self.JobLink == '[LINK]':
+            print("No link in msgBox")
+        else:
+            # messaging.get_by_role("button", name = 'Send', exact=True).click()
+            print("msg sent")
         
-        msgBox.fill(f"Hi there {self.ApplicantName},\nthank you for your interest in the {self.ApplicationTitle} , the opening is with one of our partner companies.\n\nPlease submit your resume through this link: https://app.qureos.com/jobs/647d96908a8cbf001eb145c8?referrer=AS07B To increase your chances of being matched with job opportunities with our partner companies, please complete your profile on Qureos.\n\nOnce you have submitted your application, please let me know so that I can confirm its receipt.")
 
 
+    def getRequiredJobLink(self):
         
+        #Reading my Assigned Jobs for the week
+        df = pd.read_csv("My_Jobs_Details.csv")
+        job_titles = list(df['Job Title'])
+        search_title = self.ApplicationTitle
 
+        # Find the best matching name
+        best_match = process.extractOne(search_title, job_titles)
 
+        print(f"Search Name: {search_title}")
+        print(f"Best Match: {best_match[0]}")
+        print(f"Similarity Score: {best_match[1]}\n\n")
 
+        if best_match[1] < 65:
+            print(f" -> NO JOB Title Found with {search_title}")
+            return "[LINK]"
+
+        df = df[df['Job Title'] == best_match[0]]
+        return list(df['col-Job Description'])[0]
 
