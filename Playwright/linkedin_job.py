@@ -1,6 +1,6 @@
 from playwright.sync_api import sync_playwright
 import time
-from constant import PATH_EDGE, WEBSITE
+from constant import WEBSITE
 import pandas as pd
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
@@ -8,7 +8,7 @@ from fuzzywuzzy import process
 
 class linkedinJob():
 
-    def opening_jobs(self):
+    def opening_jobs(self, PATH_EDGE):
         with sync_playwright() as playwright:
             browser_type = playwright.chromium
             browser = browser_type.launch_persistent_context(channel="msedge", viewport={"width": 1366, "height": 625}, user_data_dir= PATH_EDGE, headless=False)
@@ -21,7 +21,7 @@ class linkedinJob():
             page.wait_for_selector("//a[contains(@href,'www.linkedin.com/hiring/jobs')][@class = 'app-aware-link ']", timeout=20000)
             jobsCount = page.locator("//a[contains(@href,'www.linkedin.com/hiring/jobs')][@class = 'app-aware-link ']").count()
             print(f"the job count length is len: {jobsCount}")
-           
+        
            # Looping through All Jobs
             i = 1
             while i <= jobsCount:
@@ -41,21 +41,28 @@ class linkedinJob():
     def viewApplicants(self):
         
         #checking whether application is active or not
-        countVar = 0
-        while True:
-            active = self.page.get_by_text("Active", exact=True).is_visible(timeout=5000)
-            print(f"active-{countVar}:{active}")
-            if active: break
-            if countVar >= 5: return
-            countVar+=1
-            time.sleep(1)
+        # countVar = 0
+        # while True:
+        #     active = self.page.get_by_text("Active", exact=True).is_visible(timeout=5000)
+        #     print(f"active-{countVar}:{active}")
+        #     if active: break
+        #     if countVar >= 5: return
+        #     countVar+=1
+        #     time.sleep(1)
         
 
         #View All Applicants
         self.page.get_by_role("button", name="View applicants").click()
-        self.page.get_by_role("button", name="Ratings").click(timeout=20000)
-        self.page.get_by_text("Not a fit").click(timeout=5000)
-        self.page.get_by_text("Show results").click(timeout=10000)
+        i = 1
+        while i<7:
+            try:
+                self.page.get_by_role("button", name="Ratings").click(timeout=20000)
+                self.page.get_by_text("Not a fit").click(timeout=20000)
+                self.page.get_by_text("Show results").click(timeout=10000)
+                break
+            except:
+                i+= 1
+                pass
 
 
         # Application Title
@@ -71,15 +78,20 @@ class linkedinJob():
 
 
         # Total Pages Buttons
-        self.page.wait_for_selector("//ul[contains(@class, 'artdeco-pagination__pages--number')]//button", state='visible') 
-        allPagesButton = self.page.locator("//ul[contains(@class, 'artdeco-pagination__pages--number')]//button").count()
-        
+        try:
+            self.page.wait_for_selector("//ul[contains(@class, 'artdeco-pagination__pages--number')]//button", state='visible') 
+            allPagesButton = self.page.locator("//ul[contains(@class, 'artdeco-pagination__pages--number')]//button").count()
+        except: 
+            pass; allPagesButton = 1
+
         print(f"the allPagesButton is len: {allPagesButton}")
-        
         i = 1
         while i <= allPagesButton:
-            self.page.wait_for_selector("//ul[contains(@class, 'artdeco-pagination__pages--number')]//button", state='visible') 
-            self.page.locator(f"(//ul[contains(@class, 'artdeco-pagination__pages--number')]//button)[{i}]").click(timeout=10000)
+            try:
+                self.page.wait_for_selector("//ul[contains(@class, 'artdeco-pagination__pages--number')]//button", state='visible') 
+                self.page.locator(f"(//ul[contains(@class, 'artdeco-pagination__pages--number')]//button)[{i}]").click()
+            except: pass
+
             print(f"allpagesButton number: {i}")
             self.ApplicantsPerPages()
 
@@ -95,6 +107,8 @@ class linkedinJob():
         
         print(f"the ApplicantsPerPages is len: {ApplicantsCount}")
 
+        self.Removing_Message_Box_DiscardBtn()
+
         i = 1
         while i <= ApplicantsCount:
             self.page.wait_for_selector(f"(//div[@class='hiring-applicants__list-container']/ul/li/a)[{i}]", state='visible') 
@@ -102,7 +116,7 @@ class linkedinJob():
             
             self.eachApplicantProfile()
 
-            time.sleep(0.04)         
+            time.sleep(1)         
             ApplicantsCount = self.page.locator("//div[@class='hiring-applicants__list-container']/ul/li/a").count()
            
             print(f"Applicant number -  : {i}, {ApplicantsCount}")
@@ -114,6 +128,7 @@ class linkedinJob():
         # Application Header 
         appHeader = self.page.locator("(//div[contains(@class, 'hiring-applicant-header')])[1]")
         Message = None
+
 
         ## Message already send or not
         alreadyMessageSent = appHeader.get_by_text("Message sent").is_visible(timeout=2000)
@@ -143,14 +158,21 @@ class linkedinJob():
 
         #Sending Message to Applicant
         self.sendMessage()
+        self.Removing_Message_Box_DiscardBtn()
 
-        #Closing the Message box and discard button if any
-        self.page.locator("//button[span[contains(., 'Close') and contains(., 'conversation')]]").click()
-        discardPopup = self.page.get_by_role("button", name = "Discard").is_visible(timeout=3000)
-        if discardPopup:
-            print("discard Popup")
-            self.page.get_by_role("button", name = "Discard").click()
+
+    def Removing_Message_Box_DiscardBtn(self):
         
+        #Closing the Message box and discard button if any
+        boxes = self.page.locator("//button[span[contains(., 'Close') and contains(., 'conversation')]]").count()
+       
+        while boxes >= 1:
+            self.page.locator(f"(//button[span[contains(., 'Close') and contains(., 'conversation')]])[{boxes}]").click()
+            discardPopup = self.page.get_by_role("button", name = "Discard").count()
+            if discardPopup >= 1:
+                print("discard Popup")
+                self.page.get_by_role("button", name = "Discard").click()
+            boxes -= 1
 
 
     def sendMessage(self):
@@ -186,7 +208,7 @@ class linkedinJob():
         print(f"Best Match: {best_match[0]}")
         print(f"Similarity Score: {best_match[1]}\n\n")
 
-        if best_match[1] < 65:
+        if best_match[1] < 80:
             print(f" -> NO JOB Title Found with {search_title}")
             return "[LINK]"
 
