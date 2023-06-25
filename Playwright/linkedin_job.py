@@ -167,7 +167,7 @@ class linkedinJob():
         if self.JobLink == '[LINK]':
             print("No link in msgBox")
         else:
-            # messaging.get_by_role("button", name = 'Send', exact=True).click()
+            messaging.get_by_role("button", name = 'Send', exact=True).click()
             print("msg sent")
         
 
@@ -175,7 +175,7 @@ class linkedinJob():
     def getRequiredJobLink(self):
         
         #Reading my Assigned Jobs for the week
-        df = pd.read_csv("My_Jobs_Details.csv")
+        df = pd.read_csv("D:\WORK\All_Python_Work\Python Work\PANDAS folder\Qureos\Playwright\My_Jobs_Details.csv")
         job_titles = list(df['Job Title'])
         search_title = self.ApplicationTitle
 
