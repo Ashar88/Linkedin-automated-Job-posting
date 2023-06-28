@@ -2,7 +2,6 @@ from playwright.sync_api import sync_playwright
 import time
 from constant import WEBSITE
 import pandas as pd
-from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 
 
@@ -40,15 +39,15 @@ class linkedinJob():
 
     def viewApplicants(self):
         
-        #checking whether application is active or not
-        # countVar = 0
-        # while True:
-        #     active = self.page.get_by_text("Active", exact=True).is_visible(timeout=5000)
-        #     print(f"active-{countVar}:{active}")
-        #     if active: break
-        #     if countVar >= 5: return
-        #     countVar+=1
-        #     time.sleep(1)
+        # checking whether application is active or not
+        countVar = 0
+        while True:
+            active = self.page.get_by_text("Active", exact=True).is_visible(timeout=5000)
+            print(f"active-{countVar}:{active}")
+            if active: break
+            if countVar >= 10: return
+            countVar+=1
+            time.sleep(1)
         
 
         #View All Applicants
@@ -88,11 +87,13 @@ class linkedinJob():
         i = 1
         while i <= allPagesButton:
             try:
-                self.page.wait_for_selector("//ul[contains(@class, 'artdeco-pagination__pages--number')]//button", state='visible') 
+                time.sleep(0.5)
+                # self.page.wait_for_selector("//ul[contains(@class, 'artdeco-pagination__pages--number')]//button", state='visible') 
                 self.page.locator(f"(//ul[contains(@class, 'artdeco-pagination__pages--number')]//button)[{i}]").click()
             except: pass
 
             print(f"allpagesButton number: {i}")
+            # time.sleep(2)
             self.ApplicantsPerPages()
 
             # break
@@ -111,12 +112,12 @@ class linkedinJob():
 
         i = 1
         while i <= ApplicantsCount:
-            self.page.wait_for_selector(f"(//div[@class='hiring-applicants__list-container']/ul/li/a)[{i}]", state='visible') 
+            # self.page.wait_for_selector(f"(//div[@class='hiring-applicants__list-container']/ul/li/a)[{i}]", state='visible') 
             self.page.locator(f"(//div[@class='hiring-applicants__list-container']/ul/li/a)[{i}]").click(timeout=10000)
             
             self.eachApplicantProfile()
 
-            time.sleep(1)         
+            time.sleep(0.7)         
             ApplicantsCount = self.page.locator("//div[@class='hiring-applicants__list-container']/ul/li/a").count()
            
             print(f"Applicant number -  : {i}, {ApplicantsCount}")
@@ -179,26 +180,36 @@ class linkedinJob():
         
         #Sending Message to Each applicant
         messaging = self.page.locator("//div[@aria-label='Messaging' and @role='dialog']")
+
+        # messageDate = messaging.locator("//time[contains(@class, 'msg-s-message-list__time-heading')]").last
+        # messageDate.scroll_into_view_if_needed(timeout=5000)
+        # dateDay = messageDate.inner_text()
+        # print(dateDay)
+        # self.getDayDifference(dateDay)
+        # time.sleep(7)
+
         msgBox = messaging.get_by_role("textbox")
         msgBox.click()
+      
         messageSentence = f"Hi {self.ApplicantName},\nthank you for your interest in the {self.ApplicationTitle}, the opening is with one of our partner companies.\n\nPlease submit your resume through this link: {self.JobLink} To increase your chances of being matched with job opportunities with our partner companies, Please complete your profile on Qureos.\nOnce you have submitted your application, please let me know so that I can confirm its receipt. \n𝗔 𝗤𝗨𝗜𝗖𝗞 𝗧𝗜𝗣: Boost your odds of success, {self.ApplicantName}: Must Complete your profile to 100% and stand out from the competition!"
         # messageSentence = messageSentence.encode('utf-8').decode('unicode-escape')
+        # messageSentence = f"Dear {self.ApplicantName},\n\nWe hope this message finds you well. We would like to remind you about the importance of completing your profile on our platform to maximize your chances of being selected for the {self.ApplicationTitle} at one of our partner companies.\n\nAs mentioned earlier, we have provided a link for you to complete your profile in our platform. It is crucial that you take the time to fill out the remaining details, as it significantly increases your likelihood of being considered for this position. A complete profile not only showcases your skills and qualifications but also helps us match you with the best possible opportunity.\n\nIf you have already completed your profile and applied to the job, please disregard this message, as it indicates that you have successfully taken the necessary action.\n\nRegards,\nQureos Talent Outreach Associate Team\n"
         msgBox.fill(messageSentence)
 
         #Checking Valid link to send msg
         if self.JobLink == '[LINK]':
             print("No link in msgBox")
         else:
+
             messaging.get_by_role("button", name = 'Send', exact=True).click()
             print("msg sent")
         
-
-
     def getRequiredJobLink(self):
         
         #Reading my Assigned Jobs for the week
-        df = pd.read_csv("D:\WORK\All_Python_Work\Python Work\PANDAS folder\Qureos\Playwright\My_Jobs_Details.csv")
+        df = pd.read_csv("D:\WORK\All_Python_Work\Python Work\PANDAS folder\Qureos\Playwright\FILES\My_Jobs_Details.csv")
         job_titles = list(df['Job Title'])
+        print(job_titles)
         search_title = self.ApplicationTitle
 
         # Find the best matching name
