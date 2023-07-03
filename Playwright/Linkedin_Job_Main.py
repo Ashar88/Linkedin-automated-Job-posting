@@ -34,6 +34,7 @@ class linkedinJob():
                 page.goto(WEBSITE)
                 i+=1; jobsCount = page.locator("//a[contains(@href,'www.linkedin.com/hiring/jobs')][@class = 'app-aware-link ']").count()
                 print("\nOpening_Jobs page, go back")
+                break
 
 
 
@@ -43,7 +44,9 @@ class linkedinJob():
         countVar = 0
         while True:
             active = self.page.get_by_text("Active", exact=True).is_visible(timeout=5000)
-            print(f"active-{countVar}:{active}")
+            if not active:
+                active = self.page.get_by_text("Paused", exact=True).is_visible(timeout=5000)
+            print(f"active/paused-{countVar}:{active}")
             if active: break
             if countVar >= 10: return
             countVar+=1
@@ -75,6 +78,9 @@ class linkedinJob():
         self.JobLink = self.getRequiredJobLink()
         print("The job link is :", self.JobLink)
 
+        
+        # Closing the Appeared popups
+        self.Removing_Message_Box_DiscardBtn()
 
         # Total Pages Buttons
         try:
@@ -158,12 +164,12 @@ class linkedinJob():
         Message.click()
 
         #Sending Message to Applicant
+        self.Removing_Message_Box_DiscardBtn()
         self.sendMessage()
         self.Removing_Message_Box_DiscardBtn()
 
 
     def Removing_Message_Box_DiscardBtn(self):
-        
         #Closing the Message box and discard button if any
         boxes = self.page.locator("//button[span[contains(., 'Close') and contains(., 'conversation')]]").count()
        
@@ -179,7 +185,10 @@ class linkedinJob():
     def sendMessage(self):
         
         #Sending Message to Each applicant
-        messaging = self.page.locator("//div[@aria-label='Messaging' and @role='dialog']")
+
+        self.Removing_Message_Box_DiscardBtn()
+        self.Removing_Message_Box_DiscardBtn()
+        messaging = self.page.locator("//div[@aria-label='Messaging' and @role='dialog']").first
 
         # messageDate = messaging.locator("//time[contains(@class, 'msg-s-message-list__time-heading')]").last
         # messageDate.scroll_into_view_if_needed(timeout=5000)
