@@ -28,8 +28,6 @@ class linkedinJob():
                 page.locator(f"(//a[contains(@href,'www.linkedin.com/hiring/jobs')][@class = 'app-aware-link '])[{i}]").click()
                 self.viewApplicants()
 
-                # break
-                
                 #Coming back to this page Again to check another job
                 page.goto(WEBSITE)
                 i+=1; jobsCount = page.locator("//a[contains(@href,'www.linkedin.com/hiring/jobs')][@class = 'app-aware-link ']").count()
@@ -40,7 +38,7 @@ class linkedinJob():
 
     def viewApplicants(self):
         
-        # checking whether application is active or not
+        # checking whether application is active/paused or not
         countVar = 0
         while True:
             active = self.page.get_by_text("Active", exact=True).is_visible(timeout=5000)
@@ -99,7 +97,7 @@ class linkedinJob():
             except: pass
 
             print(f"allpagesButton number: {i}")
-            # time.sleep(2)
+            time.sleep(1)
             self.ApplicantsPerPages()
 
             # break
@@ -118,7 +116,8 @@ class linkedinJob():
 
         i = 1
         while i <= ApplicantsCount:
-            # self.page.wait_for_selector(f"(//div[@class='hiring-applicants__list-container']/ul/li/a)[{i}]", state='visible') 
+            
+            self.Removing_Message_Box_DiscardBtn()
             self.page.locator(f"(//div[@class='hiring-applicants__list-container']/ul/li/a)[{i}]").click(timeout=10000)
             
             self.eachApplicantProfile()
@@ -161,11 +160,15 @@ class linkedinJob():
             moreOptions.click()
             Message = self.page.get_by_role('button', name="Message", exact=True)
             print("More... button , Message")
-        Message.click()
 
-        #Sending Message to Applicant
         self.Removing_Message_Box_DiscardBtn()
+        self.Removing_Message_Box_DiscardBtn()
+        self.Removing_Message_Box_DiscardBtn()
+        
+        #Sending Message to Applicant
+        Message.click()
         self.sendMessage()
+        
         self.Removing_Message_Box_DiscardBtn()
 
 
@@ -185,9 +188,6 @@ class linkedinJob():
     def sendMessage(self):
         
         #Sending Message to Each applicant
-
-        self.Removing_Message_Box_DiscardBtn()
-        self.Removing_Message_Box_DiscardBtn()
         messaging = self.page.locator("//div[@aria-label='Messaging' and @role='dialog']").first
 
         # messageDate = messaging.locator("//time[contains(@class, 'msg-s-message-list__time-heading')]").last

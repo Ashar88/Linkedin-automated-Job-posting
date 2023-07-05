@@ -5,14 +5,14 @@ import time
 
 
 def testing_script():
-    # Excel_Data()
+    Excel_Data()
     
     # while True:
     close_msedge()
     try:
         app = linkedinJob()
         print("here")
-        app.opening_jobs('C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data')
+        app.opening_jobs('C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data1')
 
     except Exception as e:
         # time.sleep(1500)
