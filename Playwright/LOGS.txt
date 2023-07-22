@@ -206,3 +206,9 @@ After----------2023-07-12 18:21:17
 Before----------2023-07-12 20:32:08    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data
 After----------2023-07-12 20:33:23
 
+Before----------2023-07-20 13:47:06    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data
+After----------2023-07-20 13:50:40
+
+Before----------2023-07-20 13:58:40    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data1
+After----------2023-07-20 14:00:03
+

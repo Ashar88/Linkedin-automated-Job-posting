@@ -126,13 +126,13 @@ class linkedinJob():
             
             self.Removing_Message_Box_DiscardBtn()
             self.page.locator(f"(//div[@class='hiring-applicants__list-container']/ul/li/a)[{i}]").click(timeout=10000)
+            print(f"Applicant number -  : {i}, {ApplicantsCount}")
             
             self.eachApplicantProfile()
 
             time.sleep(0.7)         
             ApplicantsCount = self.page.locator("//div[@class='hiring-applicants__list-container']/ul/li/a").count()
            
-            print(f"Applicant number -  : {i}, {ApplicantsCount}")
             i+=1
 
    
@@ -161,9 +161,17 @@ class linkedinJob():
             fullName = " ".join([name.capitalize() for name in ApplicantName.split()])
             name = HumanName(fullName)
             first , middle, last = name['first'], name['middle'], name['last']
-            if "muhammad" in first.lower() or "mohammad" in first.lower(): first = ""  
+            
+             # Not Allowed names
+            notAlloweds = ["muhammad", "mohammad", "mohammed", "muhammed", "mohamed", "muhamed"]
+           
+            for notAllowed in notAlloweds:     
+                if notAllowed in first.lower() : first = ""
+                if notAllowed in middle.lower() : middle = ""
+            
+            
             listed = [first , middle, last]
-            applicant = listed[ np.argmax([len(first), len(middle), len(last)-2]) ]
+            applicant = listed[ np.argmax([len(first), len(middle), len(last)-3]) ]
         except:
             applicant = ApplicantName
         
@@ -224,7 +232,7 @@ class linkedinJob():
       
         messageSentence = f"Hi {self.ApplicantName},\nthank you for your interest in the {self.ApplicationTitle}, the opening is with one of our partner companies.\n\nPlease submit your resume through this link: {self.JobLink} To increase your chances of being matched with job opportunities with our partner companies, Please complete your profile on Qureos.\nOnce you have submitted your application, please let me know so that I can confirm its receipt. \n𝗔 𝗤𝗨𝗜𝗖𝗞 𝗧𝗜𝗣: Boost your odds of success, {self.ApplicantName}: Must Complete your profile to 100% and stand out from the competition!"
         # messageSentence = messageSentence.encode('utf-8').decode('unicode-escape')
-        # messageSentence = f"Dear {self.ApplicantName},\n\nWe hope this message finds you well. We would like to remind you about the importance of completing your profile on our platform to maximize your chances of being selected for the {self.ApplicationTitle} at one of our partner companies.\n\nAs mentioned earlier, we have provided a link for you to complete your profile in our platform. It is crucial that you take the time to fill out the remaining details, as it significantly increases your likelihood of being considered for this position. A complete profile not only showcases your skills and qualifications but also helps us match you with the best possible opportunity.\n\nIf you have already completed your profile and applied to the job, please disregard this message, as it indicates that you have successfully taken the necessary action.\n\nRegards,\nQureos Talent Outreach Associate Team\n"
+        # messageSentence = f"Dear {self.ApplicantName},\n\nWe hope this message finds you well. We would like to remind you about the importance of completing your profile as well as applying on our platform to maximize your chances of being selected for the {self.ApplicationTitle} at one of our partner companies.\n\nAs mentioned earlier, we have provided a link for you to complete your profile in our platform. It is crucial that you take the time to fill out the remaining details, as it significantly increases your likelihood of being considered for this position. A complete profile not only showcases your skills and qualifications but also helps us match you with the best possible opportunity.\n\nIf you have already completed your profile and applied to the job, please ignore this message, as it indicates that you have successfully taken the necessary action.\n\nRegards,\nQureos Talent Outreach Associate Team\n"
         msgBox.fill(messageSentence)
 
         #Checking Valid link to send msg
