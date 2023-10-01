@@ -1,4 +1,4 @@
-from Linkedin_Job_Main import linkedinJob
+from Linkedin_Job_Main__FirstTime import linkedinJob
 import datetime
 import time
 from close_Edge_exe import close_msedge

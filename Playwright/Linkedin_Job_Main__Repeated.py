@@ -7,7 +7,7 @@ from nameparser import HumanName
 import numpy as np
 
 
-class linkedinJob():
+class linkedinJob_Repeated():
 
     def __init__(self) -> None:
         self.HEADER = '\033[95m'
@@ -36,7 +36,7 @@ class linkedinJob():
             # WEBSITE = "https://bot.sannysoft.com/" # for checking bots
             page.goto(WEBSITE, wait_until="domcontentloaded", timeout=100000)
 
-            page.wait_for_selector("//a[contains(@href,'www.linkedin.com/hiring/jobs')][@class = 'app-aware-link ']", timeout=20000)
+            page.wait_for_selector("//a[contains(@href,'www.linkedin.com/hiring/jobs')][@class = 'app-aware-link ']", timeout=50000)
             jobsCount = page.locator("//a[contains(@href,'www.linkedin.com/hiring/jobs')][@class = 'app-aware-link ']").count()
             print(f"the job count length is len: {jobsCount}")
         
@@ -66,17 +66,19 @@ class linkedinJob():
         self.Removing_Message_Box_DiscardBtn()
         self.Removing_Message_Box_DiscardBtn()
 
+
+        ### ******************************* 1 ********************************
         # checking whether application is active/paused or not
-        countVar = 0
-        while True:
-            active = self.page.get_by_text("Active", exact=True).is_visible(timeout=5000)
-            if not active:
-                active = self.page.get_by_text("Paused", exact=True).is_visible(timeout=5000)
-            print(f"active/paused-{countVar}:{active}")
-            if active: break
-            if countVar >= 10: return
-            countVar+=1
-            time.sleep(1)
+        # countVar = 0
+        # while True:
+        #     active = self.page.get_by_text("Active", exact=True).is_visible(timeout=5000)
+        #     if not active:
+        #         active = self.page.get_by_text("Paused", exact=True).is_visible(timeout=5000)
+        #     print(f"active/paused-{countVar}:{active}")
+        #     if active: break
+        #     if countVar >= 10: return
+        #     countVar+=1
+        #     time.sleep(1)
         
 
         self.Removing_Message_Box_DiscardBtn()
@@ -192,9 +194,10 @@ class linkedinJob():
         Message = None
 
 
+        ### ******************************* 2 ********************************
         ## Message already send or not
-        alreadyMessageSent = appHeader.get_by_text("Message sent").is_visible(timeout=2000)
-        if alreadyMessageSent: return 
+        # alreadyMessageSent = appHeader.get_by_text("Message sent").is_visible(timeout=2000)
+        # if alreadyMessageSent: return 
 
         
         self.Removing_Message_Box_DiscardBtn()
@@ -237,7 +240,8 @@ class linkedinJob():
         self.profileUrl = self.getProfileUrl(messaging)
         messaging = self.getMessagingBoxWithURL()
         messaging.get_by_role("button", name = "Expand your conversation with").click()
-        
+        self.messaging = messaging
+
         self.closeMessageBoxExceptProfileURL()
         self.closeMessageBoxExceptProfileURL()
         self.closeMessageBoxExceptProfileURL()
@@ -262,15 +266,18 @@ class linkedinJob():
         self.closeMessageBoxExceptProfileURL()
         self.closeMessageBoxExceptProfileURL()
 
+
+        ### ******************************* 3(Check Below as well)  ********************************
         # if self.isApplicantAlreadyReplied(messaging):
         #     alreadyReplied = True
         #     print(f"{self.OKCYAN}Already Replied!!")
-        #     self.page.evaluate("alert('Already Replied!!');")
         #     time.sleep(1)
         # else:
         #     alreadyReplied = False
         #     print(f"{self.WARNING}No Response yet")
     
+
+
         self.closeMessageBoxExceptProfileURL()
         self.closeMessageBoxExceptProfileURL()
         self.closeMessageBoxExceptProfileURL()
@@ -282,9 +289,11 @@ class linkedinJob():
         self.closeMessageBoxExceptProfileURL()
         self.closeMessageBoxExceptProfileURL()
         self.closeMessageBoxExceptProfileURL()
+        
 
-        messageSentence = f"Hi {self.ApplicantName},\nThank you for your interest in the {self.ApplicationTitle}, the opening is with one of our partner companies.\n\nPlease submit your resume through this link: {self.JobLink} To increase your chances of being matched with job opportunities with our partner companies, Please complete your profile on Qureos.\nOnce you have submitted your application, please let me know so that I can confirm its receipt. \n𝗔 𝗤𝗨𝗜𝗖𝗞 𝗧𝗜𝗣: Boost your odds of success, {self.ApplicantName}: Must Complete your profile to 100% and stand out from the competition!"
-        # messageSentence = f"Dear {self.ApplicantName},\n\nWe hope this message finds you well. We would like to remind you about the importance of completing your profile as well as applying on our platform to maximize your chances of being selected for the {self.ApplicationTitle} at one of our partner companies.\n\nAs mentioned earlier, we have provided a link for you to complete your profile in our platform. It is crucial that you take the time to fill out the remaining details, as it significantly increases your likelihood of being considered for this position. A complete profile not only showcases your skills and qualifications but also helps us match you with the best possible opportunity.\n\nIf you have already completed your profile and applied to the job, please ignore this message, as it indicates that you have successfully taken the necessary action.\n\nRegards,\nQureos Talent Outreach Associate Team\n"
+        
+        ### ******************************* 3(Check Above as well) ********************************
+        messageSentence = f"Dear {self.ApplicantName},\n\nWe hope this message finds you well. We would like to remind you about the importance of completing your profile as well as applying on our platform to maximize your chances of being selected for the {self.ApplicationTitle} at one of our partner companies.\n\nAs mentioned earlier, we have provided a link for you to complete your profile in our platform. It is crucial that you take the time to fill out the remaining details, as it significantly increases your likelihood of being considered for this position. A complete profile not only showcases your skills and qualifications but also helps us match you with the best possible opportunity.\n\nIf you have already completed your profile and applied to the job, please ignore this message, as it indicates that you have successfully taken the necessary action.\n\nRegards,\nQureos Talent Outreach Associate Team\n"
         # messageSentence = f"Dear {self.ApplicantName},\nI haven't received a message from your side. If you still want to continue, Kindly fill you application using provided link.\nThank you!"
 
 
@@ -299,7 +308,7 @@ class linkedinJob():
             print("Applicant Already Replied!")
         else:
             msgBox.fill(messageSentence)
-            # messaging.get_by_role("button", name = 'Send', exact=True).click()
+            messaging.get_by_role("button", name = 'Send', exact=True).click()
             print("msg sent")
         
 
@@ -314,8 +323,12 @@ class linkedinJob():
         self.closeMessageBoxExceptProfileURL()
         self.closeMessageBoxExceptProfileURL()
 
-        try:
-            time.sleep(2)
+        try:      
+            for _ in range(5):
+                self.closeMessageBoxExceptProfileURL()
+                time.sleep(0.2)
+                self.closeMessageBoxExceptProfileURL()
+
             for _ in range(10):
                 self.closeMessageBoxExceptProfileURL()
                 self.closeMessageBoxExceptProfileURL()
@@ -441,9 +454,6 @@ class linkedinJob():
         messagingBox.wait_for(timeout=500000) 
         return messagingBox
 
-
-
-
     def getApplicantFirstName(self, ApplicantName):
         #Selecting Appropriate Name for the Applicant
         
@@ -485,24 +495,63 @@ class linkedinJob():
                 self.page.get_by_role("button", name = "Discard").click()
             boxes = self.page.locator("//button[span[contains(., 'Close') and contains(., 'conversation')]]").count()
 
-
     def closeMessageBoxExceptProfileURL(self):
+        self.openingMessageBoxIfClosed()
+        self.openingMessageBoxIfClosed()
         boxes = self.page.locator("//button[span[contains(., 'Close') and contains(., 'conversation')]]").count()
-       
+        self.openingMessageBoxIfClosed()
+        self.openingMessageBoxIfClosed()
+
         while boxes >= 1:
+            self.openingMessageBoxIfClosed()
+            self.openingMessageBoxIfClosed()
             MessageBoxCloseBtn = self.page.locator(f"(//button[span[contains(., 'Close') and contains(., 'conversation')]])[{boxes}]")
+            self.openingMessageBoxIfClosed()
+            self.openingMessageBoxIfClosed()
             MessageBox = self.page.locator(f"(//button[span[contains(., 'Close') and contains(., 'conversation')]])[{boxes}]/ancestor::div[@aria-label='Messaging' and @role='dialog']")
+            self.openingMessageBoxIfClosed()
+            self.openingMessageBoxIfClosed()
             profileUrl = self.getProfileUrl(MessageBox)
+            self.openingMessageBoxIfClosed()
+            self.openingMessageBoxIfClosed()
 
             if profileUrl != self.profileUrl:
+                self.openingMessageBoxIfClosed()
+                self.openingMessageBoxIfClosed()
                 MessageBoxCloseBtn.click()
+                self.openingMessageBoxIfClosed()
+                self.openingMessageBoxIfClosed()
                 discardPopup = self.page.get_by_role("button", name = "Discard").count()
+                self.openingMessageBoxIfClosed()
+                self.openingMessageBoxIfClosed()
                 if discardPopup >= 1:
                     print("discard Popup")
                     self.page.get_by_role("button", name = "Discard").click()
+                self.openingMessageBoxIfClosed()
+                self.openingMessageBoxIfClosed()
                 boxes = self.page.locator("//button[span[contains(., 'Close') and contains(., 'conversation')]]").count()
             else:
                 boxes -= 1
+
+    def openingMessageBoxIfClosed(self):
+        return
+        # try:
+        #     print("Inside")
+        #     self.messaging.highlight()
+        #     expandbtn = self.messaging.get_by_role("button", name = "Expand your conversation with")
+        #     print("Inside2")
+        #     expandbtn.is_visible()
+        #     print("Inside3")
+        #     expandbtn.highlight()
+        #     time.sleep(1)
+        #     print("self.messaging.get_by_role")
+        # except Exception as e:
+        #     print("----------------------Exception Inside")
+        #     header = self.messaging.locator("//header")
+        #     header.highlight()
+        #     header.click(timeout=10000)
+        #     print("hello world")
+
 
 
 
