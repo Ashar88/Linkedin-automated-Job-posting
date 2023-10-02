@@ -236,13 +236,16 @@ class linkedinJob():
 
 
         # Message Button clicked
-        MsgVisible = appHeader.get_by_role('button', name="Message", exact=True).is_visible()
+        MsgVisible = None
+        for _ in range(30):
+            MsgVisible = appHeader.get_by_role('button', name="Message", exact=True).is_visible()
+        
         if MsgVisible:  
             Message = appHeader.get_by_role('button', name="Message", exact=True)
             print("Message button Visible")
         else:
             moreOptions = appHeader.get_by_role('button', name="More")
-            moreOptions.click()
+            moreOptions.click(timeout=100000)
             Message = self.page.get_by_role('button', name="Message", exact=True)
             print("More... button , Message")
 
@@ -253,7 +256,8 @@ class linkedinJob():
         
 
         #Sending Message to Applicant
-        Message.click()
+        Message.wait_for(timeout=20000)
+        Message.click(timeout=10000)
         self.sendMessage()
         
         self.Removing_Message_Box_DiscardBtn()

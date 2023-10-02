@@ -206,13 +206,16 @@ class linkedinJob_Repeated():
 
 
         # Message Button clicked
-        MsgVisible = appHeader.get_by_role('button', name="Message", exact=True).is_visible()
+        MsgVisible = None
+        for _ in range(30):
+            MsgVisible = appHeader.get_by_role('button', name="Message", exact=True).is_visible()
+        
         if MsgVisible:  
             Message = appHeader.get_by_role('button', name="Message", exact=True)
             print("Message button Visible")
         else:
             moreOptions = appHeader.get_by_role('button', name="More")
-            moreOptions.click()
+            moreOptions.click(timeout=100000)
             Message = self.page.get_by_role('button', name="Message", exact=True)
             print("More... button , Message")
 
@@ -223,7 +226,8 @@ class linkedinJob_Repeated():
         
 
         #Sending Message to Applicant
-        Message.click()
+        Message.wait_for(timeout=20000)
+        Message.click(timeout=10000)
         self.sendMessage()
         
         self.Removing_Message_Box_DiscardBtn()
@@ -348,7 +352,7 @@ class linkedinJob_Repeated():
                 
                 for _ in range(5):
                     self.closeMessageBoxExceptProfileURL()
-                    time.sleep(0.02)
+                    time.sleep(0.002)
                     self.closeMessageBoxExceptProfileURL()
 
             self.closeMessageBoxExceptProfileURL()
@@ -362,9 +366,9 @@ class linkedinJob_Repeated():
             self.closeMessageBoxExceptProfileURL()
            
             profileUrlCount = 0
-            for _ in range(30):
+            for _ in range(20):
                 self.closeMessageBoxExceptProfileURL()
-                time.sleep(0.1)
+                time.sleep(0.01)
                 self.closeMessageBoxExceptProfileURL()
 
 
