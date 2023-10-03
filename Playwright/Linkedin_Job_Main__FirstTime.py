@@ -49,12 +49,20 @@ class linkedinJob():
                 self.Removing_Message_Box_DiscardBtn()
 
                 print(f"\n\n  RIGHT NOW on the job({i}) - {jobsCount}")
-                page.locator(f"(//a[contains(@href,'www.linkedin.com/hiring/jobs')][@class = 'app-aware-link '])[{i}]").click()
+
+                Job = page.locator(f"(//a[contains(@href,'www.linkedin.com/hiring/jobs')][@class = 'app-aware-link '])[{i}]")
+                Job.wait_for(timeout=20000)
+                Job.scroll_into_view_if_needed(timeout=20000)
+                Job.click(timeout=10000)
                 self.viewApplicants()
 
                 #Coming back to this page Again to check another job
-                page.goto(WEBSITE)
-                i+=1; jobsCount = page.locator("//a[contains(@href,'www.linkedin.com/hiring/jobs')][@class = 'app-aware-link ']").count()
+                page.goto(WEBSITE, wait_until="domcontentloaded", timeout=200000)
+                i+=1; 
+
+                page.wait_for_selector("//a[contains(@href,'www.linkedin.com/hiring/jobs')][@class = 'app-aware-link ']", timeout=500000)
+                jobsCount = page.locator("//a[contains(@href,'www.linkedin.com/hiring/jobs')][@class = 'app-aware-link ']").count()
+
                 print("\nOpening_Jobs page, go back")
                 break
 
@@ -85,7 +93,7 @@ class linkedinJob():
         self.Removing_Message_Box_DiscardBtn()
         
         #View All Applicants
-        self.page.get_by_role("button", name="View applicants").click()
+        self.page.get_by_role("button", name="View applicants").click(timeout=200000)
         i = 1
         while i<7:
             try:
@@ -132,7 +140,7 @@ class linkedinJob():
             try:
                 time.sleep(0.5)
                 # self.page.wait_for_selector("//ul[contains(@class, 'artdeco-pagination__pages--number')]//button", state='visible') 
-                self.page.locator(f"(//ul[contains(@class, 'artdeco-pagination__pages--number')]//button)[{i}]").click()
+                self.page.locator(f"(//ul[contains(@class, 'artdeco-pagination__pages--number')]//button)[{i}]").click(timeout=200000)
             except: pass
 
             print(f"\nallpagesButton number: {i}")
@@ -287,7 +295,7 @@ class linkedinJob():
         messaging = self.page.locator("//div[@aria-label='Messaging' and @role='dialog']").first
 
         msgBox = messaging.get_by_role("textbox")
-        msgBox.click()
+        msgBox.click(timeout=200000)
       
         messageSentence = f"Hi {self.ApplicantName},\nthank you for your interest in the {self.ApplicationTitle}, the opening is with one of our partner companies.\n\nPlease submit your resume through this link: {self.JobLink} To increase your chances of being matched with job opportunities with our partner companies, Please complete your profile on Qureos.\nOnce you have submitted your application, please let me know so that I can confirm its receipt. \n𝗔 𝗤𝗨𝗜𝗖𝗞 𝗧𝗜𝗣: Boost your odds of success, {self.ApplicantName}: Must Complete your profile to 100% and stand out from the competition!"
         msgBox.fill(messageSentence)
@@ -296,7 +304,7 @@ class linkedinJob():
         if self.JobLink == '[LINK]':
             print("No link in msgBox")
         else:
-            messaging.get_by_role("button", name = 'Send', exact=True).click()
+            messaging.get_by_role("button", name = 'Send', exact=True).click(timeout=200000)
             print("msg sent")
 
 

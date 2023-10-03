@@ -41,7 +41,7 @@ class linkedinJob_Repeated():
             print(f"the job count length is len: {jobsCount}")
         
            # Looping through All Jobs
-            i = 1
+            i = 2
             while i <= jobsCount:
 
                 self.Removing_Message_Box_DiscardBtn()
@@ -49,19 +49,27 @@ class linkedinJob_Repeated():
                 self.Removing_Message_Box_DiscardBtn()
 
                 print(f"\n\n  RIGHT NOW on the job({i}) - {jobsCount}")
-                page.locator(f"(//a[contains(@href,'www.linkedin.com/hiring/jobs')][@class = 'app-aware-link '])[{i}]").click()
+
+                Job = page.locator(f"(//a[contains(@href,'www.linkedin.com/hiring/jobs')][@class = 'app-aware-link '])[{i}]")
+                Job.wait_for(timeout=20000)
+                Job.scroll_into_view_if_needed(timeout=20000)
+                Job.click(timeout=10000)
                 self.viewApplicants()
 
                 #Coming back to this page Again to check another job
-                page.goto(WEBSITE)
-                i+=1; jobsCount = page.locator("//a[contains(@href,'www.linkedin.com/hiring/jobs')][@class = 'app-aware-link ']").count()
+                page.goto(WEBSITE, wait_until="domcontentloaded", timeout=200000)
+                i+=1; 
+
+                page.wait_for_selector("//a[contains(@href,'www.linkedin.com/hiring/jobs')][@class = 'app-aware-link ']", timeout=500000)
+                jobsCount = page.locator("//a[contains(@href,'www.linkedin.com/hiring/jobs')][@class = 'app-aware-link ']").count()
+
                 print("\nOpening_Jobs page, go back")
                 break
 
 
 
     def viewApplicants(self):
-        
+
         self.Removing_Message_Box_DiscardBtn()
         self.Removing_Message_Box_DiscardBtn()
         self.Removing_Message_Box_DiscardBtn()
@@ -86,7 +94,7 @@ class linkedinJob_Repeated():
         self.Removing_Message_Box_DiscardBtn()
         
         #View All Applicants
-        self.page.get_by_role("button", name="View applicants").click()
+        self.page.get_by_role("button", name="View applicants").click(timeout=200000)
         i = 1
         while i<7:
             try:
@@ -133,7 +141,7 @@ class linkedinJob_Repeated():
             try:
                 time.sleep(0.5)
                 # self.page.wait_for_selector("//ul[contains(@class, 'artdeco-pagination__pages--number')]//button", state='visible') 
-                self.page.locator(f"(//ul[contains(@class, 'artdeco-pagination__pages--number')]//button)[{i}]").click()
+                self.page.locator(f"(//ul[contains(@class, 'artdeco-pagination__pages--number')]//button)[{i}]").click(timeout=200000)
             except: pass
 
             print(f"\nallpagesButton number: {i}")
@@ -243,7 +251,7 @@ class linkedinJob_Repeated():
         messaging = self.page.locator("//div[@aria-label='Messaging' and @role='dialog']").first
         self.profileUrl = self.getProfileUrl(messaging)
         messaging = self.getMessagingBoxWithURL()
-        messaging.get_by_role("button", name = "Expand your conversation with").click()
+        messaging.get_by_role("button", name = "Expand your conversation with").click(timeout=200000)
         self.messaging = messaging
 
         self.closeMessageBoxExceptProfileURL()
@@ -304,7 +312,7 @@ class linkedinJob_Repeated():
 
         print(self.WHITE,end=' ')
         msgBox = messaging.get_by_role("textbox")
-        msgBox.click()
+        msgBox.click(timeout=200000)
       
         self.closeMessageBoxExceptProfileURL()
         self.closeMessageBoxExceptProfileURL()
@@ -331,7 +339,7 @@ class linkedinJob_Repeated():
             print("Applicant Already Replied!")
         else:
             msgBox.fill(messageSentence)
-            messaging.get_by_role("button", name = 'Send', exact=True).click()
+            # messaging.get_by_role("button", name = 'Send', exact=True).click(timeout=200000)
             print("msg sent")
         
 
