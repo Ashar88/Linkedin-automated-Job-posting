@@ -141,7 +141,7 @@ class linkedinJob_Repeated():
             try:
                 time.sleep(0.5)
                 # self.page.wait_for_selector("//ul[contains(@class, 'artdeco-pagination__pages--number')]//button", state='visible') 
-                self.page.locator(f"(//ul[contains(@class, 'artdeco-pagination__pages--number')]//button)[{i}]").click(timeout=200000)
+                self.page.locator(f"(//ul[contains(@class, 'artdeco-pagination__pages--number')]//button)[{i}]").click(timeout=200)
             except: pass
 
             print(f"\nallpagesButton number: {i}")
