@@ -275,12 +275,28 @@ class linkedinJob_Repeated():
         # if self.isApplicantAlreadyReplied(messaging):
         #     alreadyReplied = True
         #     print(f"{self.OKCYAN}Already Replied!!")
-        #     time.sleep(1)
+            
+        #     try:
+        #         file_path = r"D:\WORK\All_Python_Work\Python Work\PANDAS folder\Qureos\Applied_Applicant_List.txt"
+        #         with open(file_path, "a") as file:
+        #             file.write(f"{self.FullApplicantName} -->  {self.ApplicationTitle}  --> https://www.linkedin.com/in/{self.profileUrl}")
+        #             file.write("\n")    
+
+        #         time.sleep(1)
+        #     except Exception as e:
+        #         print(e)
+        
         # else:
         #     alreadyReplied = False
         #     print(f"{self.WARNING}No Response yet")
-    
 
+        #     try:
+        #         file_path = r"D:\WORK\All_Python_Work\Python Work\PANDAS folder\Qureos\Not_Applied_Applicant_List.txt"
+        #         with open(file_path, "a") as file:
+        #             file.write(f"{self.FullApplicantName} -->  {self.ApplicationTitle}  --> https://www.linkedin.com/in/{self.profileUrl}")
+        #             file.write("\n")    
+        #     except Exception as e:
+        #         print(e)
 
         self.closeMessageBoxExceptProfileURL()
         self.closeMessageBoxExceptProfileURL()
@@ -297,8 +313,10 @@ class linkedinJob_Repeated():
 
         
         ### ******************************* 3(Check Above as well) ********************************
+        ### ******************************* 3(Don't Share link) ********************************
         messageSentence = f"Dear {self.ApplicantName},\n\nWe hope this message finds you well. We would like to remind you about the importance of completing your profile as well as applying on our platform to maximize your chances of being selected for the {self.ApplicationTitle} at one of our partner companies.\n\nAs mentioned earlier, we have provided a link for you to complete your profile in our platform. It is crucial that you take the time to fill out the remaining details, as it significantly increases your likelihood of being considered for this position. A complete profile not only showcases your skills and qualifications but also helps us match you with the best possible opportunity.\n\nIf you have already completed your profile and applied to the job, please ignore this message, as it indicates that you have successfully taken the necessary action.\n\nRegards,\nQureos Talent Outreach Associate Team\n"
-        # messageSentence = f"Dear {self.ApplicantName},\nI haven't received a message from your side. If you still want to continue, Kindly fill you application using provided link.\nThank you!"
+        # messageSentence = f"Dear {self.ApplicantName}, I haven't received a message from your side. If you still want to continue, Kindly fill your Application using provided link.\nThank you!"
+        # messageSentence = f"Dear {self.ApplicantName},\nHope you're doing well. I haven't received a message from your side. If you still want to continue, Kindly fill your Application using already provided link.\nThank you!"
 
 
         #Checking Valid link to send msg
@@ -306,9 +324,10 @@ class linkedinJob_Repeated():
         self.closeMessageBoxExceptProfileURL()
         self.closeMessageBoxExceptProfileURL()
 
-        if self.JobLink == '[LINK]':
-            print("No link in msgBox")
-        elif alreadyReplied:
+        # if self.JobLink == '[LINK]':
+        #     print("No link in msgBox")
+        # eif alreadyReplied:
+        if alreadyReplied:
             print("Applicant Already Replied!")
         else:
             msgBox.fill(messageSentence)
