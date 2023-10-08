@@ -265,6 +265,17 @@ class linkedinJob_Repeated():
         self.closeMessageBoxExceptProfileURL()
         self.closeMessageBoxExceptProfileURL()
         self.closeMessageBoxExceptProfileURL()
+
+
+        ### ******************************* 2.1 ********************************
+        NotAllowedName = []
+        if self.FullApplicantName in NotAllowedName:
+            print(f"{self.FAIL}'{self.FullApplicantName}' NAME is not allowed!")
+            print(self.WHITE,end='')
+            return
+        
+
+
         print(f"{self.BOLD}The Applicant Name is : {self.ApplicantName}  ( {self.FullApplicantName} )")
         print(self.WHITE,end=' ')
 
