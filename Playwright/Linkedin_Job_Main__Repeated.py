@@ -140,8 +140,8 @@ class linkedinJob_Repeated():
         while i <= allPagesButton:
             try:
                 time.sleep(0.5)
-                # self.page.wait_for_selector("//ul[contains(@class, 'artdeco-pagination__pages--number')]//button", state='visible') 
-                self.page.locator(f"(//ul[contains(@class, 'artdeco-pagination__pages--number')]//button)[{i}]").click(timeout=200)
+                # self.page.locator(f"(//ul[contains(@class, 'artdeco-pagination__pages--number')]//button)[{i}]").scroll_into_view_if_needed(timeout=30000)
+                self.page.locator(f"(//ul[contains(@class, 'artdeco-pagination__pages--number')]//button)[{i}]").click()
             except: pass
 
             print(f"\nallpagesButton number: {i}")
@@ -149,7 +149,9 @@ class linkedinJob_Repeated():
             self.ApplicantsPerPages()
 
             # break
-            i+=1;  allPagesButton = self.page.locator("//ul[contains(@class, 'artdeco-pagination__pages--number')]//button").count()
+            i+=1;  
+            self.page.wait_for_selector("//ul[contains(@class, 'artdeco-pagination__pages--number')]//button", timeout=500000)
+            allPagesButton = self.page.locator("//ul[contains(@class, 'artdeco-pagination__pages--number')]//button").count()
 
 
     def ApplicantsPerPages(self):
