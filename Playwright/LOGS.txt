@@ -696,3 +696,76 @@ After----------2023-10-07 20:40:24
 Before----------2023-10-07 20:48:25    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data
 After----------2023-10-07 20:51:25
 
+Before----------2023-10-14 19:30:23    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data
+After----------2023-10-14 19:31:05
+
+Before----------2023-10-14 19:39:05    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data1
+After----------2023-10-14 19:43:34
+
+Before----------2023-10-14 20:04:43    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data
+After----------2023-10-14 20:05:34
+
+Before----------2023-10-14 20:13:34    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data1
+After----------2023-10-14 20:19:17
+
+Before----------2023-10-14 20:27:17    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data
+After----------2023-10-14 20:30:11
+
+Before----------2023-10-14 20:38:11    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data1
+After----------2023-10-14 20:42:05
+
+Before----------2023-10-14 20:50:05    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data
+After----------2023-10-14 20:52:33
+
+Before----------2023-10-14 21:00:34    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data1
+After----------2023-10-14 21:01:15
+
+Before----------2023-10-14 21:09:15    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data
+After----------2023-10-14 21:09:30
+
+Before----------2023-10-14 21:17:30    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data1
+After----------2023-10-14 21:20:19
+
+Before----------2023-10-14 21:28:20    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data
+After----------2023-10-14 21:31:28
+
+Before----------2023-10-14 21:39:28    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data1
+After----------2023-10-14 21:39:41
+
+Before----------2023-10-14 21:47:41    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data
+After----------2023-10-14 21:50:19
+
+Before----------2023-10-14 21:58:19    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data1
+After----------2023-10-14 21:59:28
+
+Before----------2023-10-17 22:31:31    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data
+Before----------2023-10-21 21:38:41    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data
+After----------2023-10-21 21:39:32
+
+Before----------2023-10-21 21:47:32    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data1
+After----------2023-10-21 21:49:42
+
+Before----------2023-10-21 21:57:43    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data
+After----------2023-10-21 22:01:33
+
+Before----------2023-10-21 22:09:33    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data1
+After----------2023-10-21 22:13:05
+
+Before----------2023-10-21 22:21:05    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data
+After----------2023-10-21 22:24:52
+
+Before----------2023-10-21 22:32:52    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data1
+After----------2023-10-21 22:35:44
+
+Before----------2023-10-22 14:46:24    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data
+After----------2023-10-22 14:50:33
+
+Before----------2023-10-22 14:58:34    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data1
+After----------2023-10-22 15:01:13
+
+Before----------2023-10-22 20:18:20    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data
+After----------2023-10-22 20:21:25
+
+Before----------2023-10-22 20:29:25    C:/Users/Syscom/AppData/Local/Microsoft/Edge/User Data1
+After----------2023-10-22 20:32:02
+

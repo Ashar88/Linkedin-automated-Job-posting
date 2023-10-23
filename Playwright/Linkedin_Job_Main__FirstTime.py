@@ -279,15 +279,18 @@ class linkedinJob():
 
     def Removing_Message_Box_DiscardBtn(self):
         #Closing the Message box and discard button if any
-        boxes = self.page.locator("//button[span[contains(., 'Close') and contains(., 'conversation')]]").count()
-       
-        while boxes >= 1:
-            self.page.locator(f"(//button[span[contains(., 'Close') and contains(., 'conversation')]])[{boxes}]").click()
-            discardPopup = self.page.get_by_role("button", name = "Discard").count()
-            if discardPopup >= 1:
-                print("discard Popup")
-                self.page.get_by_role("button", name = "Discard").click()
+        try:
             boxes = self.page.locator("//button[span[contains(., 'Close') and contains(., 'conversation')]]").count()
+        
+            while boxes >= 1:
+                self.page.locator(f"(//button[span[contains(., 'Close') and contains(., 'conversation')]])[{boxes}]").click()
+                discardPopup = self.page.get_by_role("button", name = "Discard").count()
+                if discardPopup >= 1:
+                    print("discard Popup")
+                    self.page.get_by_role("button", name = "Discard").click()
+                boxes = self.page.locator("//button[span[contains(., 'Close') and contains(., 'conversation')]]").count()
+        except:
+            print("Exception in Removing_Message_Box_DiscardBtn!!")
 
     def sendMessage(self):
         
